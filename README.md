@@ -8,7 +8,7 @@ for each independent "DOM Extraction", thus making it slow to use. Once the resu
 Aldo aims to make it almost effortless to fetch results from a remote website.
 
 # TODO
-* [✓] HTTP Requests
+✓ HTTP Requests
 * [ ] Lexical Analysis
 * [ ] Element Manager
 * [ ] Sorting
