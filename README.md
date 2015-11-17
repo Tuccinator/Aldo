@@ -1,4 +1,5 @@
 # Aldo
+
 Simple, yet relatively advanced HTML scraper.
 ---
 Most page scrapers built in PHP can be tedious to use, while providing unintended results. These page scrapers iterate through the HTML
