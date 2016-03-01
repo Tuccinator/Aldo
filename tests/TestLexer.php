@@ -53,8 +53,6 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		var_dump($tokens);
-
 		$this->assertTrue($tokens[11]['attributes']['required']);
 	}
 }

@@ -55,13 +55,17 @@ class Lexer
 
 				// separate lexeme and add to array
 				$pieces = explode($delimiters[1], $lexeme_unformatted);
+
+				// Do not add comment
+				if(strstr($pieces[0], '!--')) {
+					continue;
+				}
+
 				array_push($lexemes, $pieces[0]);
 
 				// if there is content inside the HTML element, add it to the array aswell
-				if(isset($pieces[1])) {
-					if(!empty($pieces[1])) {
-						array_push($lexemes, $pieces[1]);
-					}
+				if(!empty($pieces[1])) {
+					array_push($lexemes, $pieces[1]);
 				}
 			}
 

@@ -19,5 +19,5 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 * [ ] Parent/children
 * [ ] Set value of element, instead of creating a new array for value
 * [ ] Handle HTML exceptions: input, br, etc
-* [ ] Do not include comments in sequence
+* [x] Do not include comments in sequence
 * [ ] Alias functions for certain attributes; href => link(), src => source(), etc
