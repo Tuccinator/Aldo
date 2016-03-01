@@ -16,10 +16,45 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$html 		= $request->fetch();
 
 		$lexer 		= new Lexer;
-		$sequence 	= $lexer->_scan($html);
-
-		var_dump($sequence);
+		$sequence 	= $lexer->scan($html);
 
 		$this->assertContains('html', $sequence[1]);
+
+		return $sequence;
+	}
+
+	/**
+	 * @depends testScan
+	 */
+	public function testEvaluateClass(array $sequence)
+	{
+		$lexer 	= new Lexer;
+		$tokens = $lexer->evaluate($sequence);
+
+		$this->assertContains('text-center', $tokens[8]['attributes']['class']);
+	}
+
+	/**
+	 * @depends testScan
+	 */
+	public function testEvaluateId(array $sequence)
+	{
+		$lexer 	= new Lexer;
+		$tokens = $lexer->evaluate($sequence);
+
+		$this->assertContains('hi-container', $tokens[8]['attributes']['id']);
+	}
+
+	/**
+	 * @depends testScan
+	 */
+	public function testEvaluateRequired(array $sequence)
+	{
+		$lexer 	= new Lexer;
+		$tokens = $lexer->evaluate($sequence);
+
+		var_dump($tokens);
+
+		$this->assertTrue($tokens[11]['attributes']['required']);
 	}
 }

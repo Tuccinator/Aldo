@@ -7,15 +7,26 @@ namespace Aldo\Lexer;
 class Lexer
 {
 
+	/**
+	 * Transform a complete HTML string into individual tokens
+	 *
+	 * @var $html string HTML
+	 */
 	public function transform($html)
 	{
-		$lexemes	= $this->_scan($html);
-		$tokens		= $this->_evaluate($lexemes);
+		$lexemes	= $this->scan($html);
+		$tokens		= $this->evaluate($lexemes);
 
 		// return some type of element manager
 	}
 
-	public function _scan($html)
+	/**
+	 * Format HTML into individual nodes/lexemes
+	 *
+	 * @var $html string HTML
+	 * @return array Lexemes formatted from HTML
+	 */
+	public function scan($html)
 	{
 		// set the delimiters for the scanner
 		$delimiters 		= array('<', '>');
@@ -30,7 +41,7 @@ class Lexer
 		 */
 		$second_sequence 	= function() use($first_sequence, $delimiters) {
 			$lexemes = array();
-			
+
 			// iterate through each unformatted lexeme and format it
 			foreach($first_sequence as $key => $lexeme_unformatted) {
 
@@ -63,5 +74,44 @@ class Lexer
 
 		// send formatted lexemes to evaluator
 		return $sequence;
+	}
+
+	/**
+	 * Format lexemes into usable tokens
+	 *
+	 * @var $lexemes array All lexemes associated with HTML
+	 * @return array Lexemes transformed into tokens
+	 */
+	public function evaluate($lexemes)
+	{
+		// array to hold all formatted tokens
+		$tokens 	= array();
+
+		// iterate through each lexeme to format it
+		for($i = 0; $i < count($lexemes); $i++) {
+
+			// set the attributes array
+			$tokens[$i]['attributes'] = array();
+
+			// split each individual lexeme by space
+			$lexeme_parts = explode(' ', $lexemes[$i]);
+
+			// set the tag name, if there is a tag name
+			$tokens[$i]['tag'] = $lexeme_parts[0];
+
+			// if there are attributes, go through them
+			if(count($lexeme_parts) > 1) {
+				for($attribute_index = 1; $attribute_index < count($lexeme_parts); $attribute_index++) {
+					if(strstr($lexeme_parts[$attribute_index], '=')) {
+						$attribute = explode('=', $lexeme_parts[$attribute_index]);
+						$tokens[$i]['attributes'][$attribute[0]] = trim($attribute[1], '"');
+					} else {
+						$tokens[$i]['attributes'][$lexeme_parts[$attribute_index]] = true;
+					}
+				}
+			}
+		}
+
+		return $tokens;
 	}
 }
