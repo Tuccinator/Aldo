@@ -106,12 +106,14 @@ class Lexer
 						$attribute = explode('=', $lexeme_parts[$attribute_index]);
 						$tokens[$i]['attributes'][$attribute[0]] = trim($attribute[1], '"');
 					} else {
+						// if attribute is an "empty attribute", automatically set to true
 						$tokens[$i]['attributes'][$lexeme_parts[$attribute_index]] = true;
 					}
 				}
 			}
 		}
 
+		// send tokens back to transformer for any other related formatting
 		return $tokens;
 	}
 }
