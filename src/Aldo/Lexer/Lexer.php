@@ -117,6 +117,55 @@ class Lexer
 			}
 		}
 
+
+		// array to hold all incomplete parents
+		$parents = array();
+
+		// go through each token to set the parent
+		for($token_index = 0; $token_index < count($tokens); $token_index++) {
+
+			// parent is automatically null
+			$parent = null;
+
+			// if parent isn't set, set it to last incomplete parent
+			if(!isset($tokens[$token_index]['parent'])) {
+
+				// if there is a parent in parents array, set the most recent incomplete parent to current parent
+				if(count($parents) > 0) {
+					end($parents);
+					$parent = key($parents);
+				}
+			}
+
+			// make sure the current tag is a closing tag
+			if(!strstr('/', $tokens[$token_index]['tag'])) {
+
+				// if there is another tag after this one, check if it's a closing tag for current element
+				if(isset($tokens[$token_index + 1])) {
+					$closingTag = '/' . $tokens[$token_index]['tag'];
+
+					// if the next element is a new element instead of closing tag, add current element as parent
+					if($tokens[$token_index + 1]['tag'] != $closingTag) {
+						$parents[$token_index] = $tokens[$token_index]['tag'];
+					}
+				}
+
+			}
+
+			// if there are any parents, check to see if most recent incomplete parent is found
+			if(count($parents) > 0) {
+				$closingParentTag = '/' . end($parents);
+
+				// if found, remove parent from parents array
+				if($tokens[$token_index]['tag'] == $closingParentTag) {
+					array_pop($parents);
+				}
+			}
+
+			// set the token's parent
+			$tokens[$token_index]['parent'] = $parent;
+		}
+
 		// send tokens back to transformer for any other related formatting
 		return $tokens;
 	}
