@@ -118,6 +118,8 @@ class Lexer
 
 			// if there are attributes, go through them
 			if(count($lexeme_parts) > 1) {
+				$lastAttribute = '';
+
 				for($attribute_index = 1; $attribute_index < count($lexeme_parts); $attribute_index++) {
 					if(strstr($lexeme_parts[$attribute_index], '=')) {
 						$attribute = explode('=', $lexeme_parts[$attribute_index]);
@@ -129,7 +131,25 @@ class Lexer
 						}
 
 						$tokens[$i]['attributes'][$attribute[0]] = trim($attribute[1], '"');
+
+						$lastAttribute = $attribute[0];
 					} else {
+
+						// check for multiple classes
+						if($lastAttribute == 'class' && strstr($lexeme_parts[$attribute_index], '"')) {
+
+							// check if class is already set
+							if(is_string($tokens[$i]['attributes']['class'])) {
+								$lastClass = $tokens[$i]['attributes']['class'];
+								$tokens[$i]['attributes']['class'] = array();
+								$tokens[$i]['attributes']['class'][] = $lastClass;
+							}
+
+							$tokens[$i]['attributes']['class'][] = trim($lexeme_parts[$attribute_index], '"');
+
+							continue;
+						}
+
 						// if attribute is an "empty attribute", automatically set to true
 						$tokens[$i]['attributes'][$lexeme_parts[$attribute_index]] = true;
 					}

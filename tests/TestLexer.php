@@ -31,8 +31,19 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		var_dump($tokens);
-		$this->assertContains('text-center', $tokens[6]['attributes']['class']);
+		$this->assertContains('bye-town', $tokens[8]['attributes']['class']);
+	}
+
+	/**
+	 * @depends testScan
+	 */
+	public function testEvaluateMultipleClasses(array $sequence)
+	{
+		$lexer 	= new Lexer;
+		$tokens = $lexer->evaluate($sequence);
+
+		$this->assertContains('text-center', $tokens[6]['attributes']['class'][0]);
+		$this->assertContains('hi-town', $tokens[6]['attributes']['class'][1]);
 	}
 
 	/**
@@ -64,8 +75,6 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	{
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
-
-		var_dump($tokens);
 
 		$this->assertEquals(5, $tokens[8]['parent']);
 	}

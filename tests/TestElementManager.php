@@ -29,7 +29,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
     public function testGetElements(ElementManager $elementManager)
     {
         $elements = $elementManager->getElements();
-        $this->assertEquals('text-center', $elements[6]['attributes']['class']);
+        $this->assertEquals('bye-town', $elements[8]['attributes']['class']);
     }
 
     /**
@@ -72,7 +72,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$element = $elementManager->getElementByIndex(5);
         $children = $elementManager->getChildren($element);
 
-		$this->assertEquals('bye-container', $children[1]['attributes']['id']);
-        $this->assertEquals('text-center', $children[0]['attributes']['class']);
+		$this->assertEquals('hi-container', $children[0]['attributes']['id']);
+        $this->assertEquals('bye-town', $children[1]['attributes']['class']);
     }
 }

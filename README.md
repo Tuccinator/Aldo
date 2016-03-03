@@ -21,5 +21,5 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 * [ ] Handle HTML exceptions: input, br, etc
 * [x] Do not include comments in sequence
 * [ ] Alias functions for certain attributes; href => link(), src => source(), value => val(), etc
-* [ ] Support multiple classes in element
+* [x] Support multiple classes in element
 * [ ] Turn arrays into objects
