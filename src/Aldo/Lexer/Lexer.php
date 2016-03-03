@@ -1,6 +1,8 @@
 <?php
 namespace Aldo\Lexer;
 
+use Aldo\Element\ElementManager;
+
 /**
 * Lexer class for transforming HTML into objects and arrays
 */
@@ -17,7 +19,7 @@ class Lexer
 		$lexemes	= $this->scan($html);
 		$tokens		= $this->evaluate($lexemes);
 
-		// return some type of element manager
+		return new ElementManager($tokens);
 	}
 
 	/**
@@ -61,12 +63,17 @@ class Lexer
 					continue;
 				}
 
-				array_push($lexemes, $pieces[0]);
+				$lexeme = [
+					$pieces[0],
+					'value' => null
+				];
 
-				// if there is content inside the HTML element, add it to the array aswell
+				// if there is content inside the HTML element, add the value to current element
 				if(!empty($pieces[1])) {
-					array_push($lexemes, $pieces[1]);
+					$lexeme['value'] = $pieces[1];
 				}
+
+				array_push($lexemes, $lexeme);
 			}
 
 			// send back all formatted lexemes
@@ -94,20 +101,33 @@ class Lexer
 		// iterate through each lexeme to format it
 		for($i = 0; $i < count($lexemes); $i++) {
 
+			// split each individual lexeme by space
+			$lexeme_parts = explode(' ', $lexemes[$i][0]);
+
 			// set the attributes array
 			$tokens[$i]['attributes'] = array();
 
-			// split each individual lexeme by space
-			$lexeme_parts = explode(' ', $lexemes[$i]);
-
 			// set the tag name, if there is a tag name
 			$tokens[$i]['tag'] = $lexeme_parts[0];
+
+			// set the value
+			$tokens[$i]['value'] = $lexemes[$i]['value'];
+
+			// set the current ID
+			$tokens[$i]['id'] = $i;
 
 			// if there are attributes, go through them
 			if(count($lexeme_parts) > 1) {
 				for($attribute_index = 1; $attribute_index < count($lexeme_parts); $attribute_index++) {
 					if(strstr($lexeme_parts[$attribute_index], '=')) {
 						$attribute = explode('=', $lexeme_parts[$attribute_index]);
+
+						// check if element is an input field with value attribute
+						if($attribute[0] == 'value') {
+							$tokens[$i]['value'] = trim($attribute[1], '"');
+							continue;
+						}
+
 						$tokens[$i]['attributes'][$attribute[0]] = trim($attribute[1], '"');
 					} else {
 						// if attribute is an "empty attribute", automatically set to true
@@ -127,18 +147,18 @@ class Lexer
 			// parent is automatically null
 			$parent = null;
 
-			// if parent isn't set, set it to last incomplete parent
-			if(!isset($tokens[$token_index]['parent'])) {
+			// make sure the current tag is not a closing tag
+			if(!strstr($tokens[$token_index]['tag'], '/')) {
 
-				// if there is a parent in parents array, set the most recent incomplete parent to current parent
-				if(count($parents) > 0) {
-					end($parents);
-					$parent = key($parents);
+				// if parent isn't set, set it to last incomplete parent
+				if(!isset($tokens[$token_index]['parent'])) {
+
+					// if there is a parent in parents array, set the most recent incomplete parent to current parent
+					if(count($parents) > 0) {
+						end($parents);
+						$parent = key($parents);
+					}
 				}
-			}
-
-			// make sure the current tag is a closing tag
-			if(!strstr('/', $tokens[$token_index]['tag'])) {
 
 				// if there is another tag after this one, check if it's a closing tag for current element
 				if(isset($tokens[$token_index + 1])) {

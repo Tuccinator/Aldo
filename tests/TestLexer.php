@@ -30,7 +30,9 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	{
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
-		$this->assertContains('text-center', $tokens[7]['attributes']['class']);
+
+		var_dump($tokens);
+		$this->assertContains('text-center', $tokens[6]['attributes']['class']);
 	}
 
 	/**
@@ -41,7 +43,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertContains('hi-container', $tokens[7]['attributes']['id']);
+		$this->assertContains('hi-container', $tokens[6]['attributes']['id']);
 	}
 
 	/**
@@ -52,7 +54,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertTrue($tokens[10]['attributes']['required']);
+		$this->assertTrue($tokens[8]['attributes']['required']);
 	}
 
 	/**
@@ -63,7 +65,9 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertEquals(0, $tokens[1]['parent']);
+		var_dump($tokens);
+
+		$this->assertEquals(5, $tokens[8]['parent']);
 	}
 
 	/**
