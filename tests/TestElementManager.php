@@ -2,6 +2,7 @@
 require __DIR__ . '/../src/Aldo/Lexer/Lexer.php';
 require __DIR__ . '/../src/Aldo/Http/Request.php';
 require __DIR__ . '/../src/Aldo/Element/ElementManager.php';
+require __DIR__ . '/../src/Aldo/Element/Element.php';
 
 use Aldo\Lexer\Lexer;
 use Aldo\Http\Request;
@@ -29,7 +30,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
     public function testGetElements(ElementManager $elementManager)
     {
         $elements = $elementManager->getElements();
-        $this->assertEquals('bye-town', $elements[8]['attributes']['class']);
+        $this->assertEquals('bye-town', $elements[8]->attributes['class']);
     }
 
     /**
@@ -40,7 +41,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
         $parentId = $elementManager->getParentByIndex(8);
         $parent = $elementManager->getElementByIndex($parentId);
 
-        $this->assertEquals('body', $parent['tag']);
+        $this->assertEquals('body', $parent->tag);
     }
 
 	/**
@@ -51,7 +52,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$element = $elementManager->getElementByIndex(8);
         $parent = $elementManager->getParent($element);
 
-        $this->assertEquals('body', $parent['tag']);
+        $this->assertEquals('body', $parent->tag);
     }
 
     /**
@@ -61,7 +62,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
     {
         $children = $elementManager->getChildrenByIndex(5);
 
-        $this->assertEquals('bye-container', $children[1]['attributes']['id']);
+        $this->assertEquals('bye-container', $children[1]->attributes['id']);
     }
 
 	/**
@@ -72,7 +73,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$element = $elementManager->getElementByIndex(5);
         $children = $elementManager->getChildren($element);
 
-		$this->assertEquals('hi-container', $children[0]['attributes']['id']);
-        $this->assertEquals('bye-town', $children[1]['attributes']['class']);
+		$this->assertEquals('hi-container', $children[0]->attributes['id']);
+        $this->assertEquals('bye-town', $children[1]->attributes['class']);
     }
 }

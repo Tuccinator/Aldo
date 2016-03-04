@@ -2,6 +2,7 @@
 namespace Aldo\Lexer;
 
 use Aldo\Element\ElementManager;
+use Aldo\Element\Element;
 
 /**
 * Lexer class for transforming HTML into objects and arrays
@@ -104,17 +105,19 @@ class Lexer
 			// split each individual lexeme by space
 			$lexeme_parts = explode(' ', $lexemes[$i][0]);
 
+			$tokens[$i] = new Element;
+
 			// set the attributes array
-			$tokens[$i]['attributes'] = array();
+			$tokens[$i]->attributes = array();
 
 			// set the tag name, if there is a tag name
-			$tokens[$i]['tag'] = $lexeme_parts[0];
+			$tokens[$i]->tag = $lexeme_parts[0];
 
 			// set the value
-			$tokens[$i]['value'] = $lexemes[$i]['value'];
+			$tokens[$i]->value = $lexemes[$i]['value'];
 
 			// set the current ID
-			$tokens[$i]['id'] = $i;
+			$tokens[$i]->id = $i;
 
 			// if there are attributes, go through them
 			if(count($lexeme_parts) > 1) {
@@ -126,11 +129,11 @@ class Lexer
 
 						// check if element is an input field with value attribute
 						if($attribute[0] == 'value') {
-							$tokens[$i]['value'] = trim($attribute[1], '"');
+							$tokens[$i]->value = trim($attribute[1], '"');
 							continue;
 						}
 
-						$tokens[$i]['attributes'][$attribute[0]] = trim($attribute[1], '"');
+						$tokens[$i]->attributes[$attribute[0]] = trim($attribute[1], '"');
 
 						$lastAttribute = $attribute[0];
 					} else {
@@ -139,19 +142,19 @@ class Lexer
 						if($lastAttribute == 'class' && strstr($lexeme_parts[$attribute_index], '"')) {
 
 							// check if class is already set
-							if(is_string($tokens[$i]['attributes']['class'])) {
-								$lastClass = $tokens[$i]['attributes']['class'];
-								$tokens[$i]['attributes']['class'] = array();
-								$tokens[$i]['attributes']['class'][] = $lastClass;
+							if(is_string($tokens[$i]->attributes['class'])) {
+								$lastClass = $tokens[$i]->attributes['class'];
+								$tokens[$i]->attributes['class'] = array();
+								$tokens[$i]->attributes['class'][] = $lastClass;
 							}
 
-							$tokens[$i]['attributes']['class'][] = trim($lexeme_parts[$attribute_index], '"');
+							$tokens[$i]->attributes['class'][] = trim($lexeme_parts[$attribute_index], '"');
 
 							continue;
 						}
 
 						// if attribute is an "empty attribute", automatically set to true
-						$tokens[$i]['attributes'][$lexeme_parts[$attribute_index]] = true;
+						$tokens[$i]->attributes[$lexeme_parts[$attribute_index]] = true;
 					}
 				}
 			}
@@ -168,10 +171,10 @@ class Lexer
 			$parent = null;
 
 			// make sure the current tag is not a closing tag
-			if(!strstr($tokens[$token_index]['tag'], '/')) {
+			if(!strstr($tokens[$token_index]->tag, '/')) {
 
 				// if parent isn't set, set it to last incomplete parent
-				if(!isset($tokens[$token_index]['parent'])) {
+				if(!isset($tokens[$token_index]->parent)) {
 
 					// if there is a parent in parents array, set the most recent incomplete parent to current parent
 					if(count($parents) > 0) {
@@ -182,11 +185,11 @@ class Lexer
 
 				// if there is another tag after this one, check if it's a closing tag for current element
 				if(isset($tokens[$token_index + 1])) {
-					$closingTag = '/' . $tokens[$token_index]['tag'];
+					$closingTag = '/' . $tokens[$token_index]->tag;
 
 					// if the next element is a new element instead of closing tag, add current element as parent
-					if($tokens[$token_index + 1]['tag'] != $closingTag) {
-						$parents[$token_index] = $tokens[$token_index]['tag'];
+					if($tokens[$token_index + 1]->tag != $closingTag) {
+						$parents[$token_index] = $tokens[$token_index]->tag;
 					}
 				}
 
@@ -197,13 +200,13 @@ class Lexer
 				$closingParentTag = '/' . end($parents);
 
 				// if found, remove parent from parents array
-				if($tokens[$token_index]['tag'] == $closingParentTag) {
+				if($tokens[$token_index]->tag == $closingParentTag) {
 					array_pop($parents);
 				}
 			}
 
 			// set the token's parent
-			$tokens[$token_index]['parent'] = $parent;
+			$tokens[$token_index]->parent = $parent;
 		}
 
 		// send tokens back to transformer for any other related formatting

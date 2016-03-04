@@ -46,7 +46,7 @@ class ElementManager
      */
     public function getParentByIndex($index)
     {
-        return $this->elements[$index]['parent'];
+        return $this->elements[$index]->parent;
     }
 
     /**
@@ -56,7 +56,7 @@ class ElementManager
      */
     public function getParent($element)
     {
-        $parentId = $element['parent'];
+        $parentId = $element->parent;
 
         return $this->elements[$parentId];
     }
@@ -73,7 +73,7 @@ class ElementManager
         $elements = $this->getElements();
 
         foreach($elements as $element) {
-            if($element['parent'] == $index) {
+            if($element->parent == $index) {
                 array_push($children, $element);
             }
         }
@@ -88,7 +88,7 @@ class ElementManager
      */
     public function getChildren($element)
     {
-        $parentId = $element['id'];
+        $parentId = $element->id;
 
         return $this->getChildrenByIndex($parentId);
     }

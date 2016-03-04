@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../src/Aldo/Lexer/Lexer.php';
 require __DIR__ . '/../src/Aldo/Http/Request.php';
+require __DIR__ . '/../src/Aldo/Element/Element.php';
 
 use Aldo\Lexer\Lexer;
 use Aldo\Http\Request;
@@ -31,7 +32,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertContains('bye-town', $tokens[8]['attributes']['class']);
+		$this->assertContains('bye-town', $tokens[8]->attributes['class']);
 	}
 
 	/**
@@ -42,8 +43,8 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertContains('text-center', $tokens[6]['attributes']['class'][0]);
-		$this->assertContains('hi-town', $tokens[6]['attributes']['class'][1]);
+		$this->assertContains('text-center', $tokens[6]->attributes['class'][0]);
+		$this->assertContains('hi-town', $tokens[6]->attributes['class'][1]);
 	}
 
 	/**
@@ -54,7 +55,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertContains('hi-container', $tokens[6]['attributes']['id']);
+		$this->assertContains('hi-container', $tokens[6]->attributes['id']);
 	}
 
 	/**
@@ -65,7 +66,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertTrue($tokens[8]['attributes']['required']);
+		$this->assertTrue($tokens[8]->attributes['required']);
 	}
 
 	/**
@@ -76,7 +77,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertEquals(5, $tokens[8]['parent']);
+		$this->assertEquals(5, $tokens[8]->parent);
 	}
 
 	/**
@@ -87,6 +88,6 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer 	= new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$this->assertEquals(null, $tokens[0]['parent']);
+		$this->assertEquals(null, $tokens[0]->parent);
 	}
 }

@@ -11,7 +11,7 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 * [x] HTTP Requests
 * [x] Lexical Analysis (Basic)
 * [ ] Lexical Analysis (Advanced)
-* [ ] Element Manager
+* [x] Element Manager
 * [ ] Sorting
 * [ ] Rebuild HTML
 
@@ -22,4 +22,4 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 * [x] Do not include comments in sequence
 * [ ] Alias functions for certain attributes; href => link(), src => source(), value => val(), etc
 * [x] Support multiple classes in element
-* [ ] Turn arrays into objects
+* [x] Turn arrays into objects
