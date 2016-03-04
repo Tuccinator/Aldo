@@ -30,4 +30,46 @@ class Element
      * @var $value string|null Inner text or value of element
      */
     public $value;
+
+    /**
+     * Alias to return href of current element
+     *
+     * @return string|null
+     */
+    public function link()
+    {
+        if(isset($this->attributes['href'])) {
+            return $this->attributes['href'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Alias to return src of current element
+     *
+     * @return string|null
+     */
+    public function source()
+    {
+        if(isset($this->attributes['src'])) {
+            return $this->attributes['src'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Alias to return value of current element
+     *
+     * @return string|null
+     */
+    public function val()
+    {
+        if(!empty($this->value)) {
+            return $this->value;
+        }
+
+        return null;
+    }
 }

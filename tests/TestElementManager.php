@@ -76,4 +76,34 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertEquals('hi-container', $children[0]->attributes['id']);
         $this->assertEquals('bye-town', $children[1]->attributes['class']);
     }
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testElementAliasLink(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementByIndex(10);
+
+		$this->assertEquals('/test/url', $element->link());
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testElementAliasSource(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementByIndex(12);
+
+		$this->assertEquals('http://example.com/test.js', $element->source());
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testElementAliasVal(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementByIndex(8);
+
+		$this->assertEquals('bye', $element->val());
+	}
 }
