@@ -12,13 +12,14 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 * [x] Lexical Analysis (Basic)
 * [ ] Lexical Analysis (Advanced)
 * [x] Element Manager
+* [ ] Selectors for ID, class and other types
 * [ ] Sorting
 * [ ] Rebuild HTML
 
 ## Small TODO
 * [x] Parent/children
 * [x] Set value of element, instead of creating a new array for value
-* [ ] Handle HTML exceptions: input, br, etc
+* [x] Handle HTML empty elements: input, br, etc
 * [x] Do not include comments in sequence
 * [x] Alias functions for certain attributes; href => link(), src => source(), value => val(), etc
 * [x] Support multiple classes in element

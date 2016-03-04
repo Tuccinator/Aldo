@@ -163,6 +163,9 @@ class Lexer
 
 		// array to hold all incomplete parents
 		$parents = array();
+		$emptyElements = array('link', 'track', 'param', 'area', 'command',
+								'col', 'base', 'meta', 'hr', 'br', 'source',
+								'img', 'keygen', 'wbr', 'input');
 
 		// go through each token to set the parent
 		for($token_index = 0; $token_index < count($tokens); $token_index++) {
@@ -184,13 +187,17 @@ class Lexer
 				}
 
 				// if there is another tag after this one, check if it's a closing tag for current element
-				if(isset($tokens[$token_index + 1])) {
+				if(isset($tokens[$token_index + 1]) && !in_array($tokens[$token_index]->tag, $emptyElements)) {
 					$closingTag = '/' . $tokens[$token_index]->tag;
 
 					// if the next element is a new element instead of closing tag, add current element as parent
 					if($tokens[$token_index + 1]->tag != $closingTag) {
 						$parents[$token_index] = $tokens[$token_index]->tag;
 					}
+				}
+
+				if(isset($tokens[$token_index]->attributes['/'])) {
+					unset($tokens[$token_index]->attributes['/']);
 				}
 
 			}

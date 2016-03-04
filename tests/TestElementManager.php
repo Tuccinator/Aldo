@@ -106,4 +106,31 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('bye', $element->val());
 	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementByIndexInput(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementByIndex(14);
+
+		$this->assertEquals('input', $element->tag);
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementByIndexTwoEmptElementsInARow(ElementManager $elementManager)
+	{
+		$element1 = $elementManager->getElementByIndex(14);
+		$element2 = $elementManager->getElementByIndex(15);
+
+		// check parents
+		$this->assertEquals(5, $element1->parent);
+		$this->assertEquals(5, $element2->parent);
+
+		// check tags
+		$this->assertEquals('input', $element1->tag);
+		$this->assertEquals('hr', $element2->tag);
+	}
 }
