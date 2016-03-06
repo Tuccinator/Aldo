@@ -40,6 +40,29 @@ class ElementManager
     }
 
     /**
+     * @var $id string ID of HTML element to find
+     * @return Aldo\Element\Element
+     */
+    public function getElementById($id)
+    {
+        $element = null;
+
+        // go through each element to find the ID
+        foreach ($this->elements as $key => $potentialElement) {
+            if(isset($potentialElement->attributes['id'])) {
+
+                // when the element is found, set the $element to found element
+                if($potentialElement->attributes['id'] == $id) {
+                    $element = $potentialElement;
+                    break;
+                }
+            }
+        }
+
+        return $element;
+    }
+
+    /**
      * Get parent of element by array index
      *
      * @return array

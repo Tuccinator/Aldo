@@ -55,6 +55,16 @@ class TestElementManager extends PHPUnit_Framework_TestCase
         $this->assertEquals('body', $parent->tag);
     }
 
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementById(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementById('bye-container');
+
+		$this->assertEquals('bye-town', $element->attributes['class']);
+	}
+
     /**
      * @depends testGetManager
      */
