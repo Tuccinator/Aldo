@@ -9,11 +9,10 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 
 # TODO
 * [x] HTTP Requests
-* [x] Lexical Analysis (Basic)
-* [ ] Lexical Analysis (Advanced)
 * [x] Element Manager
 * [ ] Selectors for ID, class and other types
 * [ ] Sorting
+* [ ] Filtering
 * [ ] Rebuild HTML
 
 ## Small TODO

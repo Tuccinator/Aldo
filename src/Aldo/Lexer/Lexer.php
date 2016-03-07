@@ -121,7 +121,8 @@ class Lexer
 
 			// if there are attributes, go through them
 			if(count($lexeme_parts) > 1) {
-				$lastAttribute = '';
+				$last_attribute = '';
+				$end_quote_found = false;
 
 				for($attribute_index = 1; $attribute_index < count($lexeme_parts); $attribute_index++) {
 					if(strstr($lexeme_parts[$attribute_index], '=')) {
@@ -135,17 +136,26 @@ class Lexer
 
 						$tokens[$i]->attributes[$attribute[0]] = trim($attribute[1], '"');
 
-						$lastAttribute = $attribute[0];
+						// if there is only one class, don't check for more
+						if($attribute[0] == 'class' && substr($lexeme_parts[$attribute_index], strlen($lexeme_parts[$attribute_index]) - 1, 1) == '"') {
+							$end_quote_found = true;
+						}
+
+						$last_attribute = $attribute[0];
 					} else {
 
 						// check for multiple classes
-						if($lastAttribute == 'class' && strstr($lexeme_parts[$attribute_index], '"')) {
+						if($last_attribute == 'class' && $end_quote_found == false) {
+
+							if(strstr($lexeme_parts[$attribute_index], '"')) {
+								$end_quote_found = true;
+							}
 
 							// check if class is already set
 							if(is_string($tokens[$i]->attributes['class'])) {
-								$lastClass = $tokens[$i]->attributes['class'];
+								$last_class = $tokens[$i]->attributes['class'];
 								$tokens[$i]->attributes['class'] = array();
-								$tokens[$i]->attributes['class'][] = $lastClass;
+								$tokens[$i]->attributes['class'][] = $last_class;
 							}
 
 							$tokens[$i]->attributes['class'][] = trim($lexeme_parts[$attribute_index], '"');
@@ -162,8 +172,8 @@ class Lexer
 
 
 		// array to hold all incomplete parents
-		$parents = array();
-		$emptyElements = array('link', 'track', 'param', 'area', 'command',
+		$parents 		= array();
+		$empty_elements = array('link', 'track', 'param', 'area', 'command',
 								'col', 'base', 'meta', 'hr', 'br', 'source',
 								'img', 'keygen', 'wbr', 'input');
 
@@ -187,11 +197,11 @@ class Lexer
 				}
 
 				// if there is another tag after this one, check if it's a closing tag for current element
-				if(isset($tokens[$token_index + 1]) && !in_array($tokens[$token_index]->tag, $emptyElements)) {
-					$closingTag = '/' . $tokens[$token_index]->tag;
+				if(isset($tokens[$token_index + 1]) && !in_array($tokens[$token_index]->tag, $empty_elements)) {
+					$closing_tag = '/' . $tokens[$token_index]->tag;
 
 					// if the next element is a new element instead of closing tag, add current element as parent
-					if($tokens[$token_index + 1]->tag != $closingTag) {
+					if($tokens[$token_index + 1]->tag != $closing_tag) {
 						$parents[$token_index] = $tokens[$token_index]->tag;
 					}
 				}
@@ -204,10 +214,10 @@ class Lexer
 
 			// if there are any parents, check to see if most recent incomplete parent is found
 			if(count($parents) > 0) {
-				$closingParentTag = '/' . end($parents);
+				$closing_parent_tag = '/' . end($parents);
 
 				// if found, remove parent from parents array
-				if($tokens[$token_index]->tag == $closingParentTag) {
+				if($tokens[$token_index]->tag == $closing_parent_tag) {
 					array_pop($parents);
 				}
 			}
