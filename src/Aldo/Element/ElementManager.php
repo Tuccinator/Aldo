@@ -29,26 +29,80 @@ class ElementManager
         return $this->elements;
     }
 
+    /**
+     * Get all elements using a jQuery-like selector syntax
+     *
+     * @var $selector string jQuery-like selector
+     * @return array
+     */
+    public function getElement($selector)
+    {
+        $attributes = array();
+        $separatorPositions = array();
+        $separators = array();
+
+        for($i = 0; $i < strlen($selector); $i++) {
+            if($selector[$i] == '#' || $selector[$i] == '.') {
+                array_push($separatorPositions, $i);
+                array_push($separators, $selector[$i]);
+            }
+        }
+
+        for($separator_index = 0; $separator_index < count($separatorPositions); $separator_index++) {
+            $length = strlen($selector) - 1;
+
+            if(isset($separatorPositions[$separator_index + 1])) {
+                $length = $separatorPositions[$separator_index + 1] - $separatorPositions[$separator_index];
+            }
+
+            if($separators[$separator_index] == '#') {
+                $attributes['id'] = substr($selector, $separatorPositions[$separator_index] + 1, $length - 1);
+            }
+
+            if($separators[$separator_index] == '.') {
+                $attributes['class'][] = substr($selector, $separatorPositions[$separator_index] + 1, $length - 1);
+            }
+        }
+
+        $elements = $this->getElementWithAttributes($attributes);
+
+        return $elements;
+    }
+
+    /**
+     * Get all elements with an array certain attributes
+     *
+     * @var $attributes array All attributes to search for
+     * @return array
+     */
     public function getElementWithAttributes($attributes)
     {
         $elements = array();
 
+        // go through each element
         foreach($this->elements as $element) {
+
+            // automatically set the element to being valid
             $elementValid = true;
             $attributeCheck = true;
 
+            // go through each attribute
             foreach($attributes as $attribute => $value) {
+
+                // if attribute isn't in element, obviously it is invalid
                 if(!isset($element->attributes[$attribute])) {
                     $elementValid = false;
                     break;
                 }
 
+                // searching for one attribute
                 if(is_string($element->attributes[$attribute])) {
                     if($element->attributes[$attribute] != $value) {
                         $elementValid = false;
                     }
                 }
 
+                // search for an array of attributes
                 if(is_array($element->attributes[$attribute])) {
                     if(is_array($value)) {
                         foreach($value as $extra) {
@@ -64,6 +118,7 @@ class ElementManager
                 }
             }
 
+            // if the element is value, add to all elements
             if($elementValid && $attributeCheck) {
                 array_push($elements, $element);
             }

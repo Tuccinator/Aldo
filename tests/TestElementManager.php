@@ -107,6 +107,24 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertCount(2, $elements4);
 	}
 
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementUsingSelector(ElementManager $elementManager)
+	{
+		$elements1 = $elementManager->getElement('#hi-container.bob-ville');
+		$this->assertEmpty($elements1);
+
+		$elements2 = $elementManager->getElement('#hi-container.text-center.bob-ville');
+		$this->assertEmpty($elements2);
+
+		$elements3 = $elementManager->getElement('#hi-container.text-center.hi-town');
+		$this->assertCount(1, $elements3);
+
+		$elements4 = $elementManager->getElement('.hi-town.test-multiple');
+		$this->assertCount(2, $elements4);
+	}
+
     /**
      * @depends testGetManager
      */
