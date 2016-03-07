@@ -29,6 +29,49 @@ class ElementManager
         return $this->elements;
     }
 
+    public function getElementWithAttributes($attributes)
+    {
+        $elements = array();
+
+        foreach($this->elements as $element) {
+            $elementValid = true;
+            $attributeCheck = true;
+
+            foreach($attributes as $attribute => $value) {
+                if(!isset($element->attributes[$attribute])) {
+                    $elementValid = false;
+                    break;
+                }
+
+                if(is_string($element->attributes[$attribute])) {
+                    if($element->attributes[$attribute] != $value) {
+                        $elementValid = false;
+                    }
+                }
+
+                if(is_array($element->attributes[$attribute])) {
+                    if(is_array($value)) {
+                        foreach($value as $extra) {
+                            if(!in_array($extra, $element->attributes[$attribute])) {
+                                $attributeCheck = false;
+                            }
+                        }
+                    } else {
+                        if(!in_array($value, $element->attributes[$attribute])) {
+                            $attributeCheck = false;
+                        }
+                    }
+                }
+            }
+
+            if($elementValid && $attributeCheck) {
+                array_push($elements, $element);
+            }
+        }
+
+        return $elements;
+    }
+
     /**
      * Get specific element by array index
      *
@@ -120,7 +163,7 @@ class ElementManager
                     }
                 }
             }
-            
+
             return $elements;
         }
 

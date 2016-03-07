@@ -89,6 +89,24 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertEquals('input', $elements[1]->tag);
 	}
 
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementsWithAttributes(ElementManager $elementManager)
+	{
+		$elements1 = $elementManager->getElementWithAttributes(['id' => 'hi-container', 'class' => 'bob-ville']);
+		$this->assertEmpty($elements1);
+
+		$elements2 = $elementManager->getElementWithAttributes(['id' => 'hi-container', 'class' => ['text-center', 'bob-ville']]);
+		$this->assertEmpty($elements2);
+
+		$elements3 = $elementManager->getElementWithAttributes(['id' => 'hi-container', 'class' => ['text-center', 'hi-town']]);
+		$this->assertCount(1, $elements3);
+
+		$elements4 = $elementManager->getElementWithAttributes(['class' => ['hi-town', 'test-multiple']]);
+		$this->assertCount(2, $elements4);
+	}
+
     /**
      * @depends testGetManager
      */
