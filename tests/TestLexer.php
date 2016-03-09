@@ -13,11 +13,11 @@ class TestLexer extends PHPUnit_Framework_TestCase
 {
 	public function testScan()
 	{
-		$request 	= new Request('http://localhost/Aldo/test.html');
-		$html 		= $request->fetch();
+		$request = new Request('http://localhost/Aldo/test.html');
+		$html = $request->fetch();
 
-		$lexer 		= new Lexer;
-		$sequence 	= $lexer->scan($html);
+		$lexer = new Lexer;
+		$sequence = $lexer->scan($html);
 
 		$this->assertContains('head', $sequence[1]);
 
@@ -29,7 +29,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateClass(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertContains('bye-town', $tokens[8]->attributes['class']);
@@ -40,7 +40,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateMultipleClasses(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertContains('text-center', $tokens[6]->attributes['class'][0]);
@@ -52,7 +52,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateId(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertContains('hi-container', $tokens[6]->attributes['id']);
@@ -63,7 +63,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateRequired(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertTrue($tokens[8]->attributes['required']);
@@ -74,7 +74,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateParent(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertEquals(5, $tokens[8]->parent);
@@ -85,7 +85,7 @@ class TestLexer extends PHPUnit_Framework_TestCase
 	 */
 	public function testEvaluateParentIsNull(array $sequence)
 	{
-		$lexer 	= new Lexer;
+		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
 		$this->assertEquals(null, $tokens[0]->parent);

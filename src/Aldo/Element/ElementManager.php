@@ -37,10 +37,16 @@ class ElementManager
      */
     public function getElement($selector)
     {
+        // attributes holder
         $attributes = array();
+
+        // holder of id and class positions
         $separatorPositions = array();
+
+        // holder of the actual separator i.e. # and .
         $separators = array();
 
+        // find all the id and class positions
         for($i = 0; $i < strlen($selector); $i++) {
             if($selector[$i] == '#' || $selector[$i] == '.') {
                 array_push($separatorPositions, $i);
@@ -48,6 +54,7 @@ class ElementManager
             }
         }
 
+        // get all the id and class names from the previously set positions
         for($separator_index = 0; $separator_index < count($separatorPositions); $separator_index++) {
             $length = strlen($selector) - 1;
 
@@ -64,6 +71,7 @@ class ElementManager
             }
         }
 
+        // retrieve all elements with the attributes specified
         $elements = $this->getElementWithAttributes($attributes);
 
         return $elements;

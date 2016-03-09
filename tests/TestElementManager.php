@@ -15,11 +15,11 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 {
 	public function testGetManager()
     {
-        $request 	= new Request('http://localhost/Aldo/test.html');
-		$html 		= $request->fetch();
+        $request = new Request('http://localhost/Aldo/test.html');
+		$html = $request->fetch();
 
-		$lexer            = new Lexer;
-		$elementManager   = $lexer->transform($html);
+		$lexer = new Lexer;
+		$elementManager = $lexer->transform($html);
 
 		return $elementManager;
     }
