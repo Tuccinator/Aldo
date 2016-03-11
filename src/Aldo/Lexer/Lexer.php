@@ -141,7 +141,13 @@ class Lexer
 							$end_quote_found = true;
 						}
 
-						$last_attribute = $attribute[0];
+						if(isset($attribute[1])) {
+							if(substr($attribute[1], strlen($attribute[1]) - 1, 1) != '"') {
+								$last_attribute = $attribute[0];
+								$end_quote_found = false;
+							}
+						}
+
 					} else {
 
 						// check for multiple classes
@@ -160,6 +166,19 @@ class Lexer
 
 							$tokens[$i]->attributes['class'][] = trim($lexeme_parts[$attribute_index], '"');
 
+							continue;
+						}
+
+						if(!strstr($lexeme_parts[$attribute_index], '"') && $end_quote_found == false) {
+							if(strlen($last_attribute) > 1) {
+								$tokens[$i]->attributes[$last_attribute] .= ' ' . $lexeme_parts[$attribute_index];
+							}
+							continue;
+						} else {
+							if(strlen($last_attribute) > 1) {
+								$tokens[$i]->attributes[$last_attribute] .= ' ' . trim($lexeme_parts[$attribute_index], '"');
+								$end_quote_found = true;
+							}
 							continue;
 						}
 

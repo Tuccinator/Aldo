@@ -116,7 +116,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertEmpty($elements1);
 
 		$elements2 = $elementManager->getElement('#hi-container.text-center.bob-ville');
-		$this->assertEmpty($elements2);
+		$this->assertCount(0, $elements2);
 
 		$elements3 = $elementManager->getElement('#hi-container.text-center.hi-town');
 		$this->assertCount(1, $elements3);
@@ -146,6 +146,16 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertEquals('hi-container', $children[0]->attributes['id']);
         $this->assertEquals('bye-town', $children[1]->attributes['class']);
     }
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementAttributeWithSpaces(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElement('#titleDiv');
+
+		$this->assertEquals('test spaces in attribute', $element[0]->attributes['title']);
+	}
 
 	/**
 	 * @depends testGetManager
@@ -190,7 +200,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 	/**
 	 * @depends testGetManager
 	 */
-	public function testGetElementByIndexTwoEmptElementsInARow(ElementManager $elementManager)
+	public function testGetElementByIndexTwoEmptyElementsInARow(ElementManager $elementManager)
 	{
 		$element1 = $elementManager->getElementByIndex(14);
 		$element2 = $elementManager->getElementByIndex(15);

@@ -56,7 +56,7 @@ class ElementManager
 
         // get all the id and class names from the previously set positions
         for($separator_index = 0; $separator_index < count($separatorPositions); $separator_index++) {
-            $length = strlen($selector) - 1;
+            $length = strlen($selector);
 
             if(isset($separatorPositions[$separator_index + 1])) {
                 $length = $separatorPositions[$separator_index + 1] - $separatorPositions[$separator_index];
