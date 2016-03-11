@@ -171,12 +171,20 @@ class Lexer
 
 						if(!strstr($lexeme_parts[$attribute_index], '"') && $end_quote_found == false) {
 							if(strlen($last_attribute) > 1) {
-								$tokens[$i]->attributes[$last_attribute] .= ' ' . $lexeme_parts[$attribute_index];
+								if(is_array($tokens[$i]->attributes[$last_attribute])) {
+									$tokens[$i]->attributes[$last_attribute][] = $lexeme_parts[$attribute_index];
+								} else {
+									$tokens[$i]->attributes[$last_attribute] .= ' ' . $lexeme_parts[$attribute_index];
+								}
 							}
 							continue;
 						} else {
 							if(strlen($last_attribute) > 1) {
-								$tokens[$i]->attributes[$last_attribute] .= ' ' . trim($lexeme_parts[$attribute_index], '"');
+								if(is_array($tokens[$i]->attributes[$last_attribute])) {
+									$tokens[$i]->attributes[$last_attribute][] = trim($lexeme_parts[$attribute_index], '"');
+								} else {
+									$tokens[$i]->attributes[$last_attribute] .= ' ' . trim($lexeme_parts[$attribute_index], '"');
+								}
 								$end_quote_found = true;
 							}
 							continue;
