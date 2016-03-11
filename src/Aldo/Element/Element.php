@@ -6,6 +6,8 @@ namespace Aldo\Element;
  */
 class Element
 {
+    private $elementManager;
+
     /**
      * @var $id integer ID in Element\ElementManager elements array
      */
@@ -71,5 +73,15 @@ class Element
         }
 
         return null;
+    }
+
+    public function setElementManager($elementManager)
+    {
+        $this->elementManager = $elementManager;
+    }
+
+    public function getChildren()
+    {
+        return $this->elementManager->getChildrenByIndex($this->id);
     }
 }

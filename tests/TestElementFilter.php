@@ -33,12 +33,35 @@ class TestElementFilter extends PHPUnit_Framework_TestCase
     {
         $elements = $elementManager->getElements();
 
-        $filter = new ElementFilter;
-
-        $emails = $filter->getEmails($elements);
+        $emails = ElementFilter::getEmails($elements);
 
         $this->assertCount(3, $emails);
         $this->assertEquals('test2@example.com', $emails[1]);
         $this->assertEquals('test3@example.com', $emails[2]);
     }
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementsWithWord(ElementManager $elementManager)
+	{
+		$elements = $elementManager->getElements();
+
+		$filtered = ElementFilter::getElementsWithWord($elements, 'test');
+
+		$this->assertEquals('span', $filtered[0]->tag);
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetUrls(ElementManager $elementManager)
+	{
+		$elements = $elementManager->getElements();
+
+		$urls = ElementFilter::getUrls($elements);
+
+		$this->assertEquals('/test/url', $urls[0]);
+		$this->assertEquals('http://test-url-for-filter.com', $urls[1]);
+	}
 }

@@ -20,7 +20,13 @@ class Lexer
 		$lexemes	= $this->scan($html);
 		$tokens		= $this->evaluate($lexemes);
 
-		return new ElementManager($tokens);
+		$elementManager = new ElementManager($tokens);
+
+		foreach($tokens as $token) {
+			$token->setElementManager($elementManager);
+		}
+
+		return $elementManager;
 	}
 
 	/**
