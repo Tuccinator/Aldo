@@ -35,6 +35,8 @@ class TestElement extends PHPUnit_Framework_TestCase
 
         $children = $parent->getChildren();
 
-        $this->assertEquals('child-class', $children[0]->attributes['class']);
+		$child = array_shift($children);
+
+        $this->assertEquals('child-class', $child->attributes['class']);
     }
 }

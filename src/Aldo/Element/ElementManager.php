@@ -279,18 +279,23 @@ class ElementManager
 
         $elements = $this->getElements();
 
+        // go through each element
         for($i = $index + 1; $i < count($elements); $i++) {
             if(isset($elements[$i])) {
+
+                // if parent matches, add to array
                 if($elements[$i]->parent == $index) {
                     $children[$i] = $elements[$i];
                 }
 
+                // break the loop when there won't be any new children
                 if(!is_null($elements[$i]->parent) && $elements[$i]->parent < $index) {
                     break;
                 }
             }
         }
 
+        // go through each child and get their own children, and their grandchildren, and on
         foreach($children as $child) {
             array_merge($children, $this->getChildrenByIndex($child->id));
         }
@@ -303,7 +308,7 @@ class ElementManager
      *
      * @return array
      */
-    public function getChildren($element)
+    public function getChildren($element, $selector = false)
     {
         $parentId = $element->id;
 
