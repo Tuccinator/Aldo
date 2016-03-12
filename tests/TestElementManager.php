@@ -131,8 +131,11 @@ class TestElementManager extends PHPUnit_Framework_TestCase
     public function testGetChildrenByIndex(ElementManager $elementManager)
     {
         $children = $elementManager->getChildrenByIndex(5);
+		array_shift($children);
 
-        $this->assertEquals('bye-container', $children[1]->attributes['id']);
+		$child = array_shift($children);
+
+        $this->assertEquals('bye-container', $child->attributes['id']);
     }
 
 	/**
@@ -143,9 +146,29 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$element = $elementManager->getElementByIndex(5);
         $children = $elementManager->getChildren($element);
 
-		$this->assertEquals('hi-container', $children[0]->attributes['id']);
-        $this->assertEquals('bye-town', $children[1]->attributes['class']);
+		$child1 = array_shift($children);
+		$this->assertEquals('hi-container', $child1->attributes['id']);
+
+		$child2 = array_shift($children);
+        $this->assertEquals('bye-town', $child2->attributes['class']);
     }
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetChildrenHasChild(ElementManager $elementManager)
+	{
+		$parent = 5;
+		$element = $elementManager->getElementByIndex($parent);
+		$children = $elementManager->getChildren($element);
+
+		foreach($children as $child) {
+			if($child->parent != $parent) {
+				$this->assertEquals('child-class', $child->attributes['class']);
+				break;
+			}
+		}
+	}
 
 	/**
 	 * @depends testGetManager

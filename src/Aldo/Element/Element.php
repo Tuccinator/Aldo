@@ -75,13 +75,23 @@ class Element
         return null;
     }
 
+    /**
+     * Set the element manager for the element
+     *
+     * @var $elementManager Aldo\Element\ElementManager Element manager
+     */
     public function setElementManager($elementManager)
     {
         $this->elementManager = $elementManager;
     }
 
-    public function getChildren()
+    /**
+     * Get the children of current element
+     *
+     * @return array
+     */
+    public function getChildren($selector = false)
     {
-        return $this->elementManager->getChildrenByIndex($this->id);
+        return $this->elementManager->getChildrenByIndex($this->id, $selector);
     }
 }

@@ -20,22 +20,12 @@ class ElementManager
     }
 
     /**
-     * Get all elements
+     * Format the selector into an array of attributes
      *
+     * @var $selector string Selector for fetching elements
      * @return array
      */
-    public function getElements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * Get all elements using a jQuery-like selector syntax
-     *
-     * @var $selector string jQuery-like selector
-     * @return array
-     */
-    public function getElement($selector)
+    public function formatSelector($selector)
     {
         // attributes holder
         $attributes = array();
@@ -70,6 +60,30 @@ class ElementManager
                 $attributes['class'][] = substr($selector, $separatorPositions[$separator_index] + 1, $length - 1);
             }
         }
+
+        return $attributes;
+    }
+
+    /**
+     * Get all elements
+     *
+     * @return array
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * Get all elements using a jQuery-like selector syntax
+     *
+     * @var $selector string jQuery-like selector
+     * @return array
+     */
+    public function getElement($selector)
+    {
+        // format selector and retrieve attributes
+        $attributes = $this->formatSelector($selector);
 
         // retrieve all elements with the attributes specified
         $elements = $this->getElementWithAttributes($attributes);
@@ -265,10 +279,20 @@ class ElementManager
 
         $elements = $this->getElements();
 
-        foreach($elements as $element) {
-            if($element->parent == $index) {
-                array_push($children, $element);
+        for($i = $index + 1; $i < count($elements); $i++) {
+            if(isset($elements[$i])) {
+                if($elements[$i]->parent == $index) {
+                    $children[$i] = $elements[$i];
+                }
+
+                if(!is_null($elements[$i]->parent) && $elements[$i]->parent < $index) {
+                    break;
+                }
             }
+        }
+
+        foreach($children as $child) {
+            array_merge($children, $this->getChildrenByIndex($child->id));
         }
 
         return $children;
