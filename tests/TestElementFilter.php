@@ -43,6 +43,18 @@ class TestElementFilter extends PHPUnit_Framework_TestCase
 	/**
 	 * @depends testGetManager
 	 */
+	 public function testGetEmailsWithAttribute(ElementManager $elementManager)
+	 {
+		 $elements = $elementManager->getElements();
+
+		 $emails = ElementFilter::getEmails($elements, 'data-email');
+
+		 $this->assertEquals('testattribute@email.com', $emails[0]);
+	 }
+
+	/**
+	 * @depends testGetManager
+	 */
 	public function testGetElementsWithWord(ElementManager $elementManager)
 	{
 		$elements = $elementManager->getElements();
@@ -50,6 +62,18 @@ class TestElementFilter extends PHPUnit_Framework_TestCase
 		$filtered = ElementFilter::getElementsWithWord($elements, 'test');
 
 		$this->assertEquals('span', $filtered[0]->tag);
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetElementsWithWordWithAttribute(ElementManager $elementManager)
+	{
+		$elements = $elementManager->getElements();
+
+		$filtered = ElementFilter::getElementsWithWord($elements, 'baz', 'id');
+
+		$this->assertEquals('input', $filtered[0]->tag);
 	}
 
 	/**
@@ -63,5 +87,17 @@ class TestElementFilter extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('/test/url', $urls[0]);
 		$this->assertEquals('http://test-url-for-filter.com', $urls[1]);
+	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetUrlsWithAttribute(ElementManager $elementManager)
+	{
+		$elements = $elementManager->getElements();
+
+		$urls = ElementFilter::getUrls($elements, 'data-url');
+
+		$this->assertEquals('random-block', $urls[0]->attributes['id']);
 	}
 }
