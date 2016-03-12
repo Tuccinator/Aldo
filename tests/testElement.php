@@ -33,10 +33,20 @@ class TestElement extends PHPUnit_Framework_TestCase
     {
         $parent = $elementManager->getElement('#parent')[0];
 
-        $children = $parent->getChildren();
-
-		$child = array_shift($children);
+        $child = $parent->getChildren();
 
         $this->assertEquals('child-class', $child->attributes['class']);
     }
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetChildrenFromElementWithSelector(ElementManager $elementManager)
+	{
+		$parent = $elementManager->getElementByIndex(5);
+
+        $child = $parent->getChildren('.child-class');
+
+        $this->assertEquals('child-class', $child->attributes['class']);
+	}
 }

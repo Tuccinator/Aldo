@@ -61,6 +61,12 @@ class ElementManager
             }
         }
 
+        if(isset($attributes['class'])) {
+            if(count($attributes['class']) == 1) {
+                $attributes['class'] = $attributes['class'][0];
+            }
+        }
+
         return $attributes;
     }
 
@@ -80,13 +86,13 @@ class ElementManager
      * @var $selector string jQuery-like selector
      * @return array
      */
-    public function getElement($selector)
+    public function getElement($selector, $tokens = null)
     {
         // format selector and retrieve attributes
         $attributes = $this->formatSelector($selector);
 
         // retrieve all elements with the attributes specified
-        $elements = $this->getElementWithAttributes($attributes);
+        $elements = $this->getElementWithAttributes($attributes, $tokens);
 
         return $elements;
     }
@@ -97,12 +103,16 @@ class ElementManager
      * @var $attributes array All attributes to search for
      * @return array
      */
-    public function getElementWithAttributes($attributes)
+    public function getElementWithAttributes($attributes, $tokens = null)
     {
         $elements = array();
 
+        if(is_null($tokens)) {
+            $tokens = $this->elements;
+        }
+
         // go through each element
-        foreach($this->elements as $element) {
+        foreach($tokens as $element) {
 
             // automatically set the element to being valid
             $elementValid = true;
@@ -285,7 +295,7 @@ class ElementManager
 
                 // if parent matches, add to array
                 if($elements[$i]->parent == $index) {
-                    $children[$i] = $elements[$i];
+                    $children[$elements[$i]->id] = $elements[$i];
                 }
 
                 // break the loop when there won't be any new children
@@ -297,7 +307,9 @@ class ElementManager
 
         // go through each child and get their own children, and their grandchildren, and on
         foreach($children as $child) {
-            array_merge($children, $this->getChildrenByIndex($child->id));
+            foreach($this->getChildrenByIndex($child->id) as $grandChild) {
+                $children[$grandChild->id] = $grandChild;
+            }
         }
 
         return $children;

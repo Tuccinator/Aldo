@@ -92,6 +92,19 @@ class Element
      */
     public function getChildren($selector = false)
     {
-        return $this->elementManager->getChildrenByIndex($this->id, $selector);
+        // Get all the children
+        $children = $this->elementManager->getChildrenByIndex($this->id);
+
+        // If there is a selector for a specific element, get that element
+        if($selector) {
+            $children = $this->elementManager->getElement($selector, $children);
+        }
+
+        // when there is only 1 child, return it instead of an array of children
+        if(count($children) == 1) {
+            $children = array_shift($children);
+        }
+
+        return $children;
     }
 }
