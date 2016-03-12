@@ -119,7 +119,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$this->assertCount(0, $elements2);
 
 		$elements3 = $elementManager->getElement('#hi-container.text-center.hi-town');
-		$this->assertCount(1, $elements3);
+		$this->assertNotEmpty($elements3);
 
 		$elements4 = $elementManager->getElement('.hi-town.test-multiple');
 		$this->assertCount(2, $elements4);
@@ -177,7 +177,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 	{
 		$element = $elementManager->getElement('#titleDiv');
 
-		$this->assertEquals('test spaces in attribute', $element[0]->attributes['title']);
+		$this->assertEquals('test spaces in attribute', $element->attributes['title']);
 	}
 
 	/**

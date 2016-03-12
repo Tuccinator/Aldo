@@ -31,7 +31,7 @@ class TestElement extends PHPUnit_Framework_TestCase
      */
     public function testGetChildrenFromElement(ElementManager $elementManager)
     {
-        $parent = $elementManager->getElement('#parent')[0];
+        $parent = $elementManager->getElement('#parent');
 
         $child = $parent->getChildren();
 

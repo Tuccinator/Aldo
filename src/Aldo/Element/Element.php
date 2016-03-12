@@ -102,7 +102,9 @@ class Element
 
         // when there is only 1 child, return it instead of an array of children
         if(count($children) == 1) {
-            $children = array_shift($children);
+            if(is_array($children)) {
+                $children = array_shift($children);
+            }
         }
 
         return $children;

@@ -94,6 +94,10 @@ class ElementManager
         // retrieve all elements with the attributes specified
         $elements = $this->getElementWithAttributes($attributes, $tokens);
 
+        if(count($elements) == 1) {
+            $elements = array_shift($elements);
+        }
+
         return $elements;
     }
 

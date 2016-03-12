@@ -10,11 +10,11 @@ $html = $request->fetch();
 $lexer = new Lexer;
 $elementManager = $lexer->transform($html);
 
-$source = $elementManager->getElement('#siteLogo')[0]->source();
+$source = $elementManager->getElement('#siteLogo')->source();
 
-$imgContainer = $elementManager->getElement('#ultimediaswitch')[0];
+$imgContainer = $elementManager->getElement('#ultimediaswitch');
 
-$secondImageSource = $elementManager->getChildren($imgContainer)[0]->source();
+$secondImageSource = $imgContainer->getChildren()->source();
 ?>
 
 <!DOCTYPE html>
