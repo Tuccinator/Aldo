@@ -121,6 +121,9 @@ class TestElementManager extends PHPUnit_Framework_TestCase
 		$elements3 = $elementManager->getElement('#hi-container.text-center.hi-town');
 		$this->assertNotEmpty($elements3);
 
+		$elementsA = $elementManager->getElement('a');
+		$this->assertCount(2, $elementsA);
+
 		$elements4 = $elementManager->getElement('.hi-town.test-multiple');
 		$this->assertCount(2, $elements4);
 	}

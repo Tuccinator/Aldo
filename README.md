@@ -10,8 +10,8 @@ Aldo aims to make it almost effortless to fetch results from a remote website.
 # TODO
 * [x] HTTP Requests
 * [x] Element Manager
-* [x] Selectors for ID, class (TODO: and other types)
-* [ ] Sorting
+* [x] Selectors for ID, class, and tag name
+* [x] Sorting
 * [x] Filtering (getting emails)
 * [ ] Rebuild HTML
 

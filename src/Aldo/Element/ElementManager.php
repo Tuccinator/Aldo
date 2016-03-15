@@ -44,6 +44,18 @@ class ElementManager
             }
         }
 
+        // check if first word instance is an element tag
+        if(!in_array(substr($selector, 0, 1), array('.', '#'))) {
+            $position = strlen($selector);
+
+            if(isset($separatorPositions[0])) {
+                $position = $separatorPositions[0];
+            }
+
+            $tag = substr($selector, 0, $position);
+            $attributes['tag'] = $tag;
+        }
+
         // get all the id and class names from the previously set positions
         for($separator_index = 0; $separator_index < count($separatorPositions); $separator_index++) {
             $length = strlen($selector);
@@ -124,6 +136,13 @@ class ElementManager
 
             // go through each attribute
             foreach($attributes as $attribute => $value) {
+
+                // check if we are searching for a tag
+                if($attribute == 'tag') {
+                    if($element->tag == $value) {
+                        break;
+                    }
+                }
 
                 // if attribute isn't in element, obviously it is invalid
                 if(!isset($element->attributes[$attribute])) {
