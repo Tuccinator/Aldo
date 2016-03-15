@@ -140,7 +140,7 @@ class ElementManager
                 // check if we are searching for a tag
                 if($attribute == 'tag') {
                     if($element->tag == $value) {
-                        break;
+                        continue;
                     }
                 }
 
