@@ -82,6 +82,16 @@ $sortedElements = ElementSort::orderBy($elements, $attribute, $direction = 'asc'
 // Please be aware that the closing tags are included within the elements array. Sorting by tag may result in the closing tags appearing first.
 ```
 
+## Element Aliases
+There are a few aliases to help retrieve certain attributes
+```php
+$element->link(); // Retrieves the href attribute, assuming it's an anchor tag
+
+$element->source(); // Retrieves the src attribute
+
+$element->val(); //Retrieves the value attribute or the inner text of element
+```
+
 ## TODO
 * [x] HTTP Requests
 * [x] Element Manager
