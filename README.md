@@ -7,15 +7,30 @@ for each independent "DOM Extraction", thus making it slow to use. Once the resu
 
 Aldo aims to make it almost effortless to fetch results from a remote website.
 
-# TODO
+## Installation
+Unfortunately this project is not yet up on composer. So for installation as of current, you need to fork the repository or download the ZIP file.
+
+## How to Use
+```php
+use Aldo\Lexer\Lexer;
+use Aldo\Http\Request;
+
+// Create an HTTP request. Can be done with Aldo's own Request class or Guzzle, or your own library
+$request = new Request('http://localhost/Aldo/test.html');
+$html = $request->fetch();
+
+// Transform the HTML into an array of elements and return the element manager
+$lexer = new Lexer();
+$elementManager = $lexer->transform($html);
+```
+
+## TODO
 * [x] HTTP Requests
 * [x] Element Manager
 * [x] Selectors for ID, class, and tag name
 * [x] Sorting
 * [x] Filtering (getting emails)
 * [ ] Rebuild HTML
-
-## Small TODO
 * [x] Parent/children
 * [x] Set value of element, instead of creating a new array for value
 * [x] Handle HTML empty elements: input, br, etc
