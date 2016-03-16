@@ -26,7 +26,7 @@ $elementManager = $lexer->transform($html);
 
 ## Elements
 This is what a typical element looks like
-```php
+```
 Element => {
     [id] => index of elements array,
     [tag] => HTML tag name,
@@ -43,7 +43,7 @@ Element => {
 ```php
 
 // Getting an element
-$elementManager->getElement('a#bob.class-here'); // using a selector, only supports tag name, id and class
+$elementManager->getElement('a#bob.class-here'); // using a selector, only supports tag name, id and class. Optional 2nd parameter for an elements array returned from getChildren()
 $elementManager->getElementWithAttributes(['tag' => 'a', 'id' => 'bob', 'class' => ['class-here']]); // class can also be a string if it is one class
 $elementManager->getElementByIndex(0); // Gets the element by the index in the elements array. Both the opening and close tag count as 2 elements
 $elementManager->getElementById('bob'); // Gets the element by HTML id
@@ -58,6 +58,28 @@ $element->getParent(); // Retrieve parent directly from element
 $elementManager->getChildren($element); // Retrieve children from already fetched element
 $elementManager->getChildrenByIndex(0); // Retrieve children from index in the elements array. This would return everything inside <html>
 $element->getChildren(); // Retrieve children directly from element
+```
+
+## Element Filtering
+As of right now, there is only 3 ways of filtering but more will be added in the future.
+```php
+use Aldo\Element\ElementFilter;
+
+$emails = ElementFilter::getEmails($elements, $attribute); // Retrieve all emails from the elements array. Optional second parameter for searching within a specific attribute
+
+$words = ElementFilter::getElementsWithWord($elements, $word, $attribute); // Retrieve all elements that have a specific word in them. Optional second parameter for searching within an attribute
+
+$urls = ElementFilter::getUrls($elements, $attribute); // Retrieve all urls from the elements array. Optional second parameter for searching within an attribute
+
+```
+
+## Element Sorting
+```php
+use Aldo\Element\ElementSort;
+
+$sortedElements = ElementSort::orderBy($elements, $attribute, $direction = 'asc'|'desc'); // Sort the elements by the attribute, and which direction you choose, default direction is asc.
+
+// Please be aware that the closing tags are included within the elements array. Sorting by tag may result in the closing tags appearing first.
 ```
 
 ## TODO
