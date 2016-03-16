@@ -156,6 +156,10 @@ class Lexer
 
 					} else {
 
+						if($lexeme_parts[$attribute_index] == 'required') {
+							$tokens[$i]->attributes['required'] = true;
+						}
+
 						// check for multiple classes
 						if($last_attribute == 'class' && $end_quote_found == false) {
 

@@ -286,7 +286,7 @@ class ElementManager
      */
     public function getParentByIndex($index)
     {
-        return $this->elements[$index]->parent;
+        return $this->elements[$this->elements[$index]->parent];
     }
 
     /**
@@ -343,7 +343,7 @@ class ElementManager
      *
      * @return array
      */
-    public function getChildren($element, $selector = false)
+    public function getChildren($element)
     {
         $parentId = $element->id;
 

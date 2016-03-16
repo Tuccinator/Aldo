@@ -109,4 +109,16 @@ class Element
 
         return $children;
     }
+
+    /**
+     * Get parent of current element
+     *
+     * @return array
+     */
+    public function getParent()
+    {
+        $parent = $this->elementManager->getParentByIndex($this->id);
+
+        return $parent;
+    }
 }

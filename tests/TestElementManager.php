@@ -38,8 +38,7 @@ class TestElementManager extends PHPUnit_Framework_TestCase
      */
     public function testGetElementByIndexWithParentIndex(ElementManager $elementManager)
     {
-        $parentId = $elementManager->getParentByIndex(8);
-        $parent = $elementManager->getElementByIndex($parentId);
+        $parent = $elementManager->getParentByIndex(8);
 
         $this->assertEquals('body', $parent->tag);
     }

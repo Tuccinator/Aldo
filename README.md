@@ -15,13 +15,49 @@ Unfortunately this project is not yet up on composer. So for installation as of 
 use Aldo\Lexer\Lexer;
 use Aldo\Http\Request;
 
-// Create an HTTP request. Can be done with Aldo's own Request class or Guzzle, or your own library
+// Create an HTTP request. Can be done with Aldo's own Request class, Guzzle, or your own library
 $request = new Request('http://localhost/Aldo/test.html');
 $html = $request->fetch();
 
 // Transform the HTML into an array of elements and return the element manager
 $lexer = new Lexer();
 $elementManager = $lexer->transform($html);
+```
+
+## Elements
+This is what a typical element looks like
+```php
+Element => {
+    [id] => index of elements array,
+    [tag] => HTML tag name,
+    [value] => If the element has inner text or value attribute,
+    [attributes] =>
+        [class] => array|string depending on number of classes
+        [id] => ID of element,
+        any other attributes can be found here
+    [parent] => index of parent in elements array
+}
+```
+
+## Element Management
+```php
+
+// Getting an element
+$elementManager->getElement('a#bob.class-here'); // using a selector, only supports tag name, id and class
+$elementManager->getElementWithAttributes(['tag' => 'a', 'id' => 'bob', 'class' => ['class-here']]); // class can also be a string if it is one class
+$elementManager->getElementByIndex(0); // Gets the element by the index in the elements array. Both the opening and close tag count as 2 elements
+$elementManager->getElementById('bob'); // Gets the element by HTML id
+$elementManager->getElementsByClass('class-here'); // Gets the element using classes, can be either string or array
+
+// Getting parent of element
+$elementManager->getParent($element); // Retrieve parent from already fetched element
+$elementManager->getParentByIndex(1); // Retrieve parent from index in the elements array. In this case the parent would be <html>
+$element->getParent(); // Retrieve parent directly from element
+
+// Getting children of element
+$elementManager->getChildren($element); // Retrieve children from already fetched element
+$elementManager->getChildrenByIndex(0); // Retrieve children from index in the elements array. This would return everything inside <html>
+$element->getChildren(); // Retrieve children directly from element
 ```
 
 ## TODO

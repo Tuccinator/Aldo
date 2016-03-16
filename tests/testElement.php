@@ -49,4 +49,15 @@ class TestElement extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('child-class', $child->attributes['class']);
 	}
+
+	/**
+	 * @depends testGetManager
+	 */
+	public function testGetParent(ElementManager $elementManager)
+	{
+		$element = $elementManager->getElementByIndex(6);
+		$parent = $element->getParent();
+
+		$this->assertEquals('body', $parent->tag);
+	}
 }
