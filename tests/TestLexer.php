@@ -99,6 +99,6 @@ class TestLexer extends PHPUnit_Framework_TestCase
 		$lexer = new Lexer;
 		$tokens = $lexer->evaluate($sequence);
 
-		$lexer->rebuild($tokens);
+		$lexer->rebuild($tokens, 'new');
 	}
 }

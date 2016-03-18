@@ -272,28 +272,108 @@ class Lexer
 	 *
 	 * @var $elements array Elements from evaluator
 	 */
-	public function rebuild($elements)
+	public function rebuild($elements, $name = 'rebuild')
 	{
 		$empty_elements = array('link', 'track', 'param', 'area', 'command',
 								'col', 'base', 'meta', 'hr', 'br', 'source',
 								'img', 'keygen', 'wbr', 'input');
 
 		$html = '';
+		$parents = array();
 
 		// go through elements
-		foreach($elements as $element) {
+		for($i = 0; $i < count($elements); $i++) {
+
+			// start the new element to be added to html
+			$newElement = '';
+
+			// check if this is the closing tag of last parent
+			if(isset($elements[$i - 1])) {
+				if('/' . end($parents) == $elements[$i]->tag) {
+					array_pop($parents);
+				}
+			}
+
+			// add a tab for each parent
+			for($tab = 0; $tab < count($parents); $tab++) {
+				if(isset($elements[$i - 1])) {
+					if('/' . $elements[$i - 1]->tag != $elements[$i]->tag) {
+						$newElement .= "\t";
+					}
+				}
+			}
+
+			// make sure the element isn't empty and a closing tag
+			if(isset($elements[$i + 1])) {
+				if(substr($elements[$i]->tag, 0, 1) != '/') {
+					if(('/' . $elements[$i]->tag != $elements[$i + 1]->tag) && (!in_array($elements[$i]->tag, $empty_elements))) {
+						array_push($parents, $elements[$i]->tag);
+					}
+				}
+			}
+
+			// add to the new elemnt
+			$newElement .= '<';
+			$newElement .= $elements[$i]->tag;
+
+			// add all attributes
+			if(count($elements[$i]->attributes) > 0) {
+				$newElement .= ' ';
+
+				// go through each attribute
+				foreach($elements[$i]->attributes as $attribute => $value) {
+					$newElement .= $attribute . '="';
+
+					// if attribute is an array of values, implode with space
+					if(is_array($value)) {
+						$newElement .= implode(' ', $value);
+					} else {
+						$newElement .= $value;
+					}
+
+					$newElement .= '"';
+
+					// check if this is last attribute so we can remove space
+					end($elements[$i]->attributes);
+					$lastAttribute = key($elements[$i]->attributes);
+					if($lastAttribute !== $attribute) {
+						$newElement .= ' ';
+					}
+				}
+			}
+
 
 			// check if element is an empty element and self-close it
-			if(in_array($element->tag, $empty_elements)) {
-				$html .= '<' . $element->tag . ' />' . "\n";
+			if(in_array($elements[$i]->tag, $empty_elements)) {
+				if(!is_null($elements[$i]->value)) {
+					$newElement .= ' value="' . $elements[$i]->value . '"';
+				}
+				$newElement .= ' />' . "\n";
+				$html .= $newElement;
 				continue;
 			}
 
-			$html .= '<' . $element->tag . '>' . "\n";
+			// if there is a value of element, add to element
+			if(!is_null($elements[$i]->value)) {
+				$newElement .= '>' . $elements[$i]->value;
+			} else {
+				$newElement .= '>';
+			}
+
+			// if element is one line, don't make a line break
+			if(isset($elements[$i + 1])) {
+				if($elements[$i + 1]->tag == '/' . $elements[$i]->tag) {
+					$html .= $newElement;
+					continue;
+				}
+			}
+
+			$newElement .= "\n";
+			$html .= $newElement;
 		}
 
 		// open html file and write to it
-		$file_handler = fopen(__DIR__ . '/../../../rebuild.html', 'w');
+		$file_handler = fopen(__DIR__ . '/../../../' . $name . '.html', 'w');
 		fwrite($file_handler, $html);
 		fclose($file_handler);
 	}
