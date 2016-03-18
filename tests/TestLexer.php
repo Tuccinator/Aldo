@@ -90,4 +90,15 @@ class TestLexer extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(null, $tokens[0]->parent);
 	}
+
+	/**
+	 * @depends testScan
+	 */
+	public function testRebuild(array $sequence)
+	{
+		$lexer = new Lexer;
+		$tokens = $lexer->evaluate($sequence);
+
+		$lexer->rebuild($tokens);
+	}
 }

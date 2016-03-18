@@ -266,4 +266,35 @@ class Lexer
 		// send tokens back to transformer for any other related formatting
 		return $tokens;
 	}
+
+	/**
+	 * Rebuild an elements array into html
+	 *
+	 * @var $elements array Elements from evaluator
+	 */
+	public function rebuild($elements)
+	{
+		$empty_elements = array('link', 'track', 'param', 'area', 'command',
+								'col', 'base', 'meta', 'hr', 'br', 'source',
+								'img', 'keygen', 'wbr', 'input');
+
+		$html = '';
+
+		// go through elements
+		foreach($elements as $element) {
+
+			// check if element is an empty element and self-close it
+			if(in_array($element->tag, $empty_elements)) {
+				$html .= '<' . $element->tag . ' />' . "\n";
+				continue;
+			}
+
+			$html .= '<' . $element->tag . '>' . "\n";
+		}
+
+		// open html file and write to it
+		$file_handler = fopen(__DIR__ . '/../../../rebuild.html', 'w');
+		fwrite($file_handler, $html);
+		fclose($file_handler);
+	}
 }
