@@ -92,13 +92,23 @@ $element->source(); // Retrieves the src attribute
 $element->val(); //Retrieves the value attribute or the inner text of element
 ```
 
+## Rebuilding HTML
+If for some reason you need to rebuild the HTML, you can do so using this:
+```php
+use Aldo\Lexer\Lexer;
+
+$lexer = new Lexer;
+$elements = $lexer->transform($html); // based on How to Use guide
+$lexer->rebuild($elements, $name); // optional second parameter for the name of new html file, which will be available in base directory. Default name is "rebuild". Please omit the .html
+```
+
 ## TODO
 * [x] HTTP Requests
 * [x] Element Manager
 * [x] Selectors for ID, class, and tag name
 * [x] Sorting
 * [x] Filtering (getting emails)
-* [ ] Rebuild HTML
+* [x] Rebuild HTML
 * [x] Parent/children
 * [x] Set value of element, instead of creating a new array for value
 * [x] Handle HTML empty elements: input, br, etc
